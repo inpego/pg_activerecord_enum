@@ -7,7 +7,7 @@ Integration of PostgreSQL native enums with ActiveRecord enums.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'pg_enum'
+gem 'pg_enum', github: 'inpego/pg_enum'
 ```
 
 And then execute:
