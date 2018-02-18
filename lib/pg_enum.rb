@@ -1,4 +1,5 @@
 require 'pg_enum/version'
+require 'pg_enum/schema'
 
 module PgEnum
   def self.define(name, values, options = {})
@@ -59,4 +60,4 @@ end
 require 'active_support/all'
 require 'active_record'
 ActiveRecord::Base.send :extend, PgEnum
-
+ActiveRecord::Base.send :include, PgEnum::Schema
