@@ -26,7 +26,7 @@ Migration:
 class CreateFruits < ActiveRecord::Migration[5.1]
   def change
     create_table :fruits do |t|
-      t.enum :fruit_type, values: %i[banana orange grape], allow_blank: true
+      t.enum :fruit_type, values: %i[banana orange grape]
       t.timestamps
     end
   end
@@ -38,12 +38,10 @@ Or for existing table:
 ```ruby
 class CreateFruits < ActiveRecord::Migration[5.1]
   def change
-    add_enum :fruits, :color, values: %i[red green yellow], allow_blank: true
+    add_enum :fruits, :color, values: %i[red green yellow]
   end
 end
 ```
-
-**allow_blank** adds empty value ('') to enum.
 
 Other options are default column options.
 
@@ -70,9 +68,9 @@ Fruit.grape.count # 1
 In PostgreSQL DB:
 ```
 # select * from fruits;
- id | fruit_type |         created_at         |         updated_at         
-----+------------+----------------------------+----------------------------
-  1 | grape      | 2018-02-18 16:25:44.068334 | 2018-02-18 16:25:44.070939
+ id | fruit_type |         created_at         |         updated_at         | color  
+----+------------+----------------------------+----------------------------+--------
+  1 | grape      | 2018-02-18 20:34:35.973298 | 2018-02-18 20:34:35.980609 | yellow
 (1 row)
 
 # \dT+ fruit_type;
@@ -83,6 +81,16 @@ In PostgreSQL DB:
         |            |               |      | orange  +|          |                   | 
         |            |               |      | grape    |          |                   | 
 (1 row)
+
+# \dT+ color;
+                                      List of data types
+ Schema | Name  | Internal name | Size | Elements |  Owner   | Access privileges | Description 
+--------+-------+---------------+------+----------+----------+-------------------+-------------
+ public | color | color         | 4    | red     +| postgres |                   | 
+        |       |               |      | green   +|          |                   | 
+        |       |               |      | yellow   |          |                   | 
+(1 row)
+
 
 ```
 
