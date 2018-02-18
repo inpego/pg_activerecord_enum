@@ -24,33 +24,44 @@ Migration:
 
 ```ruby
 class CreateFruits < ActiveRecord::Migration[5.1]
-  def up
-    PgEnum.define :fruit_type, %i[banana orange grape]
+  def change
     create_table :fruits do |t|
-      t.column :fruit_type, :fruit_type
+      t.enum :fruit_type, values: %i[banana orange grape], allow_blank: true
       t.timestamps
     end
   end
+end
+```
 
-  def down
-    drop_table :fruits
-    PgEnum.drop :fruit_type
+Or for existing table:
+
+```ruby
+class CreateFruits < ActiveRecord::Migration[5.1]
+  def change
+    add_enum :fruits, :color, values: %i[red green yellow], allow_blank: true
   end
 end
 ```
+
+**allow_blank** adds empty value ('') to enum.
+
+Other options are default column options.
 
 Model:
 
 ```ruby
 class Fruit < ApplicationRecord
   pg_enum :fruit_type
+  pg_enum :color
 end
 ```
 
 ```ruby
 Fruit.banana.count # 0
 banana = Fruit.banana.create
+banana.yellow!
 banana.banana? # true
+banana.color # "yellow"
 banana.grape! #
 banana.grape? # true
 Fruit.grape.count # 1
