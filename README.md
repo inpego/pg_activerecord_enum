@@ -43,7 +43,7 @@ Model:
 
 ```ruby
 class Fruit < ApplicationRecord
-  pg_enum :type
+  pg_enum :fruit_type
 end
 ```
 
