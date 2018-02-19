@@ -1,6 +1,6 @@
 module PgEnum
   module Schema
-    def self.included(_)
+    def self.include_migrations
       ActiveRecord::ConnectionAdapters::Table.send :include, TableDefinition
       ActiveRecord::ConnectionAdapters::TableDefinition.send :include, TableDefinition
       ActiveRecord::ConnectionAdapters::AbstractAdapter.send :include, Statements
@@ -17,7 +17,7 @@ module PgEnum
         raise ArgumentError, 'Please specify values for enum in your migration.' if values.blank?
 
         enum_names.each do |enum_name|
-          PgEnum.define enum_name, values
+          PgEnum.define enum_name, values, options
           add_column(table_name, enum_name, enum_name, options)
         end
       end
@@ -32,6 +32,11 @@ module PgEnum
           PgEnum.drop enum_name
         end
       end
+
+      def drop_table_with_enums(table_name, enums, *args, &block)
+        drop_table(table_name, *args, &block)
+        enums.each { |enum_name| PgEnum.drop enum_name }
+      end
     end
 
     module TableDefinition
@@ -42,7 +47,7 @@ module PgEnum
         raise ArgumentError, 'Please specify values for enum in your migration.' if values.blank?
 
         enum_names.each do |enum_name|
-          PgEnum.define enum_name, values
+          PgEnum.define enum_name, values, options
           column(enum_name, enum_name, options)
         end
       end
@@ -54,6 +59,19 @@ module PgEnum
       end
 
       private
+
+      def invert_create_table(args)
+        table_name = args.first
+        enums = ActiveRecord::Base.connection.columns(table_name).select do |column|
+          column.sql_type_metadata.type == :enum
+        end
+        if enums.present?
+          args.shift
+          [:drop_table_with_enums, [table_name, enums.map(&:name)] + args]
+        else
+          [:drop_table, args]
+        end
+      end
 
       def invert_add_enum(args)
         [:remove_enum, args]
