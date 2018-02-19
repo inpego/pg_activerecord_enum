@@ -68,7 +68,7 @@ WHERE t.typname = '#{name}'
   end
 
   def pg_enum(name)
-    enum_values = PgEnum.values_for(name)
+    enum_values = PgEnum.values_for(name).reject(&:blank?)
     enum name => enum_values.zip(enum_values).to_h
   end
 end
