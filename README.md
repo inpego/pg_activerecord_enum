@@ -8,7 +8,7 @@ Integration of PostgreSQL native enums with ActiveRecord enums.
 2.	All schema definitions are placed inside migrations, not inside models. That makes code cleaner and eliminates the possibility to accidentally change model's enum definition even if it's defined via hash.
 3.	All the enums changes may be followed by migrations timestamps. If enum is defined inside model, it's changes may be investigated only through source control, which is far less convenient.
 4.	Performance degrade could hardly be noticed, 'cause PostgreSQL uses four-byte integers to provide enums internally.
-5.	Data validation is carried out by database itself. That makes it impossible to write inconsistent values via update_column or update_all method calls, which is an issue when using original activerecord enums, or even working with the database directly.
+5.	Data validation is carried out by database itself. That makes it impossible to write inconsistent values via `update_column` or `update_all` method calls, which is an issue when using original activerecord enums, or even working with the database directly.
 6.	The last but not least, all the enum's values are displayed with their original values when working with the database via console or GUI client. No need to look into the code base to find out which number stands for which value.
 
 
