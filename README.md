@@ -26,7 +26,7 @@ Migration:
 class CreateFruits < ActiveRecord::Migration[5.1]
   def change
     create_table :fruits do |t|
-      t.enum :fruit_type, values: %i[banana orange grape]
+      t.enum :fruit_type, values: %i[banana orange grape], allow_blank: true
       t.timestamps
     end
   end
@@ -38,12 +38,14 @@ Or for existing table:
 ```ruby
 class CreateFruits < ActiveRecord::Migration[5.1]
   def change
-    add_enum :fruits, :color, values: %i[red green yellow]
+    add_enum :fruits, :color, values: %i[red green yellow], allow_blank: true
   end
 end
 ```
 
-Other options are default column options.
+**allow_blank** adds empty value to enum.
+
+**Note:** migration rollback will remove enums only if other tables do not depend on them.
 
 Model:
 
@@ -70,28 +72,28 @@ In PostgreSQL DB:
 # select * from fruits;
  id | fruit_type |         created_at         |         updated_at         | color  
 ----+------------+----------------------------+----------------------------+--------
-  1 | grape      | 2018-02-18 20:34:35.973298 | 2018-02-18 20:34:35.980609 | yellow
+  1 | grape      | 2018-02-19 04:07:20.548005 | 2018-02-19 04:07:20.554754 | yellow
 (1 row)
 
-# \dT+ fruit_type;
+=# \dT+ fruit_type;
                                          List of data types
  Schema |    Name    | Internal name | Size | Elements |  Owner   | Access privileges | Description 
 --------+------------+---------------+------+----------+----------+-------------------+-------------
  public | fruit_type | fruit_type    | 4    | banana  +| postgres |                   | 
         |            |               |      | orange  +|          |                   | 
-        |            |               |      | grape    |          |                   | 
+        |            |               |      | grape   +|          |                   | 
+        |            |               |      |          |          |                   | 
 (1 row)
 
-# \dT+ color;
+=# \dT+ color;
                                       List of data types
  Schema | Name  | Internal name | Size | Elements |  Owner   | Access privileges | Description 
 --------+-------+---------------+------+----------+----------+-------------------+-------------
  public | color | color         | 4    | red     +| postgres |                   | 
         |       |               |      | green   +|          |                   | 
-        |       |               |      | yellow   |          |                   | 
+        |       |               |      | yellow  +|          |                   | 
+        |       |               |      |          |          |                   | 
 (1 row)
-
-
 ```
 
 ## Development

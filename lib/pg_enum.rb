@@ -9,7 +9,7 @@ module PgEnum
     previously_defined = values_for(name)
     if previously_defined.present? && previously_defined.sort != values.sort
       raise ArgumentError, "Enum `#{name}` already defined with other values: " +
-                           "#{_j(previously_defined)} (#{_j(values)} supplied)."
+        "#{_j(previously_defined)} (#{_j(values)} supplied)."
     elsif previously_defined.blank?
       ActiveRecord::Base.connection.execute("CREATE TYPE #{name} AS ENUM (#{_j(values)});")
     else
@@ -17,8 +17,17 @@ module PgEnum
     end
   end
 
-  def self.drop(name)
-    ActiveRecord::Base.connection.execute("DROP TYPE IF EXISTS #{name};")
+  def self.drop(name, options = {})
+    enum_dependencies = dependencies(name)
+    if enum_dependencies.present?
+      if options[:cascade]
+        ActiveRecord::Base.connection.execute("DROP TYPE #{name} CASCADE;")
+      else
+        ActiveRecord::Base.logger.warn "Other objects (#{_j(enum_dependencies)}) depend on enum `#{name}`, skip."
+      end
+    else
+      ActiveRecord::Base.connection.execute("DROP TYPE IF EXISTS #{name};")
+    end
   end
 
   def self.change(name, values, options = {})
@@ -47,6 +56,13 @@ WHERE t.typname = '#{name}'
     ActiveRecord::Base.connection.execute(enum_values_sql).map { |row| row['enum_value'] }
   end
 
+  def self.dependencies(name)
+    ActiveRecord::Base.connection.execute(
+      'SELECT objid::regclass::text FROM pg_depend ' +
+        "WHERE classid = 'pg_class'::regclass AND refobjid::regtype::text = '#{name}';"
+    ).to_a.map(&:values).flatten
+  end
+
   def self._j(values)
     "'#{values.join("', '")}'"
   end
@@ -60,4 +76,4 @@ end
 require 'active_support/all'
 require 'active_record'
 ActiveRecord::Base.send :extend, PgEnum
-ActiveRecord::Base.send :include, PgEnum::Schema
+PgEnum::Schema.include_migrations
