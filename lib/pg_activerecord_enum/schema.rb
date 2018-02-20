@@ -1,4 +1,4 @@
-module PgEnum
+module PgActiveRecordEnum
   module Schema
     def self.include_migrations
       ActiveRecord::ConnectionAdapters::Table.send :include, TableDefinition
@@ -17,7 +17,7 @@ module PgEnum
         raise ArgumentError, 'Please specify values for enum in your migration.' if values.blank?
 
         enum_names.each do |enum_name|
-          PgEnum.define enum_name, values, options
+          PgActiveRecordEnum.define enum_name, values, options
           add_column(table_name, enum_name, enum_name, options)
         end
       end
@@ -29,13 +29,13 @@ module PgEnum
 
         enum_names.each do |enum_name|
           remove_column(table_name, enum_name)
-          PgEnum.drop enum_name
+          PgActiveRecordEnum.drop enum_name
         end
       end
 
       def drop_table_with_enums(table_name, enums, *args, &block)
         drop_table(table_name, *args, &block)
-        enums.each { |enum_name| PgEnum.drop enum_name }
+        enums.each { |enum_name| PgActiveRecordEnum.drop enum_name }
       end
     end
 
@@ -47,7 +47,7 @@ module PgEnum
         raise ArgumentError, 'Please specify values for enum in your migration.' if values.blank?
 
         enum_names.each do |enum_name|
-          PgEnum.define enum_name, values, options
+          PgActiveRecordEnum.define enum_name, values, options
           column(enum_name, enum_name, options)
         end
       end

@@ -1,4 +1,4 @@
-# PgEnum
+# PgActiveRecordEnum
 
 Integration of PostgreSQL native enums with ActiveRecord enums.
 
@@ -17,7 +17,7 @@ Integration of PostgreSQL native enums with ActiveRecord enums.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'pg_enum', github: 'inpego/pg_enum'
+gem 'pg_activerecord_enum', github: 'inpego/pg_activerecord_enum'
 ```
 
 And then execute:
@@ -114,7 +114,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/inpego/pg_enum.
+Bug reports and pull requests are welcome on GitHub at https://github.com/inpego/pg_activerecord_enum.
 
 ## License
 

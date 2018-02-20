@@ -1,16 +1,16 @@
 
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'pg_enum/version'
+require 'pg_activerecord_enum/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = 'pg_enum'
-  spec.version       = PgEnum::VERSION
+  spec.name          = 'pg_activerecord_enum'
+  spec.version       = PgActiveRecordEnum::VERSION
   spec.authors       = ['inpego']
-  spec.email         = ['inpego@mail.ru']
+  spec.email         = 'inpego@mail.ru'
 
   spec.summary       = %q{Gem that integrates PostgreSQL native enums with ActiveRecord enums.}
-  spec.homepage      = 'https://github.com/inpego/pg_enum'
+  spec.homepage      = 'https://github.com/inpego/pg_activerecord_enum'
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

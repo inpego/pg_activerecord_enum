@@ -1,7 +1,7 @@
 require 'pg_enum/version'
 require 'pg_enum/schema'
 
-module PgEnum
+module PgActiveRecordEnum
   def self.define(name, values, options = {})
     values << '' if options[:allow_blank]
     return if values.blank?
@@ -68,12 +68,12 @@ WHERE t.typname = '#{name}'
   end
 
   def pg_enum(name)
-    enum_values = PgEnum.values_for(name).reject(&:blank?)
+    enum_values = PgActiveRecordEnum.values_for(name).reject(&:blank?)
     enum name => enum_values.zip(enum_values).to_h
   end
 end
 
 require 'active_support/all'
 require 'active_record'
-ActiveRecord::Base.send :extend, PgEnum
-PgEnum::Schema.include_migrations
+ActiveRecord::Base.send :extend, PgActiveRecordEnum
+PgActiveRecordEnum::Schema.include_migrations
