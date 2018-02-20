@@ -1,5 +1,5 @@
 require 'pg_activerecord_enum/version'
-require 'pg_activerecord_enum/version'
+require 'pg_activerecord_enum/schema'
 
 module PgActiveRecordEnum
   def self.define(name, values, options = {})

@@ -34,6 +34,7 @@ RSpec.describe PgActiveRecordEnum do
 
   describe '.drop' do
     it 'successfully sent DROP TYPE statement' do
+      allow(PgActiveRecordEnum).to receive(:dependencies).and_return([])
       expect(connection).to receive(:execute).with('DROP TYPE IF EXISTS foo;')
       PgActiveRecordEnum.drop :foo
     end
