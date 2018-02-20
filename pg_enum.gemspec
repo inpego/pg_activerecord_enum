@@ -9,14 +9,14 @@ Gem::Specification.new do |spec|
   spec.authors       = ['inpego']
   spec.email         = ['vyacheslav.kalinkin@gmail.com']
 
-  spec.summary       = %q{Gem that integrates PostgreSQL native enums with rails enums.}
+  spec.summary       = %q{Gem that integrates PostgreSQL native enums with ActiveRecord enums.}
   spec.homepage      = 'https://github.com/inpego/pg_enum'
   spec.license       = 'MIT'
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = 'http://gems.inpego.sexy'
+    spec.metadata['allowed_push_host'] = 'https://rubygems.org'
   else
     raise 'RubyGems 2.0 or newer is required to protect against ' \
       'public gem pushes.'
