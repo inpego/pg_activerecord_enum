@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'pg_enum'
   spec.version       = PgEnum::VERSION
   spec.authors       = ['inpego']
-  spec.email         = ['vyacheslav.kalinkin@gmail.com']
+  spec.email         = ['inpego@mail.ru']
 
   spec.summary       = %q{Gem that integrates PostgreSQL native enums with ActiveRecord enums.}
   spec.homepage      = 'https://github.com/inpego/pg_enum'
