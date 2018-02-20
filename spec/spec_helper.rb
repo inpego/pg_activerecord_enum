@@ -1,5 +1,5 @@
 require 'bundler/setup'
-require 'pg_enum'
+require 'pg_activerecord_enum'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

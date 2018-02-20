@@ -26,7 +26,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install pg_enum
+    $ gem install pg_activerecord_enum
 
 ## Usage
 
