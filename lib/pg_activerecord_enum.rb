@@ -67,9 +67,9 @@ WHERE t.typname = '#{name}'
     "'#{values.join("', '")}'"
   end
 
-  def pg_enum(name)
+  def pg_enum(name, options = {})
     enum_values = PgActiveRecordEnum.values_for(name).reject(&:blank?)
-    enum name => enum_values.zip(enum_values).to_h
+    enum({name => enum_values.zip(enum_values).to_h}.merge(options))
   end
 end
 

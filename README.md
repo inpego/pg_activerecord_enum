@@ -48,7 +48,7 @@ Or for existing table:
 ```ruby
 class CreateFruits < ActiveRecord::Migration[5.1]
   def change
-    add_enum :fruits, :color, values: %i[red green yellow], allow_blank: true
+    add_enum :fruits, :color, values: %i[red green yellow orange], allow_blank: true
   end
 end
 ```
@@ -62,19 +62,19 @@ Model:
 ```ruby
 class Fruit < ApplicationRecord
   pg_enum :fruit_type
-  pg_enum :color
+  pg_enum :color, _prefix: true
 end
 ```
 
 ```ruby
 Fruit.banana.count # 0
 banana = Fruit.banana.create
-banana.yellow!
 banana.banana? # true
-banana.color # "yellow"
-banana.grape! #
-banana.grape? # true
-Fruit.grape.count # 1
+banana.orange! #
+banana.orange? # true
+Fruit.orange.count # 1
+banana.color_orange!
+banana.color # "orange"
 ```
 
 In PostgreSQL DB:
