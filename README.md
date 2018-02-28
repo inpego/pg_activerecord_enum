@@ -82,10 +82,10 @@ In PostgreSQL DB:
 # select * from fruits;
  id | fruit_type |         created_at         |         updated_at         | color  
 ----+------------+----------------------------+----------------------------+--------
-  1 | grape      | 2018-02-19 04:07:20.548005 | 2018-02-19 04:07:20.554754 | yellow
+  1 | orange     | 2018-02-28 18:46:37.628178 | 2018-02-28 18:46:37.637138 | orange
 (1 row)
 
-=# \dT+ fruit_type;
+# \dT+ fruit_type;
                                          List of data types
  Schema |    Name    | Internal name | Size | Elements |  Owner   | Access privileges | Description 
 --------+------------+---------------+------+----------+----------+-------------------+-------------
@@ -95,13 +95,14 @@ In PostgreSQL DB:
         |            |               |      |          |          |                   | 
 (1 row)
 
-=# \dT+ color;
+# \dT+ color;
                                       List of data types
  Schema | Name  | Internal name | Size | Elements |  Owner   | Access privileges | Description 
 --------+-------+---------------+------+----------+----------+-------------------+-------------
  public | color | color         | 4    | red     +| postgres |                   | 
         |       |               |      | green   +|          |                   | 
         |       |               |      | yellow  +|          |                   | 
+        |       |               |      | orange  +|          |                   | 
         |       |               |      |          |          |                   | 
 (1 row)
 ```
