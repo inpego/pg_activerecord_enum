@@ -4,6 +4,8 @@ module PgActiveRecordEnum
       ActiveRecord::ConnectionAdapters::Table.send :include, TableDefinition
       ActiveRecord::ConnectionAdapters::TableDefinition.send :include, TableDefinition
       ActiveRecord::ConnectionAdapters::AbstractAdapter.send :include, Statements
+      ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.send :prepend, AdapterEnumSupport
+      ActiveRecord::ConnectionAdapters::PostgreSQLAdapter.send :prepend, ColumnDumper
       ActiveRecord::Migration::CommandRecorder.send :include, CommandRecorder
     end
 
@@ -50,6 +52,23 @@ module PgActiveRecordEnum
           PgActiveRecordEnum.define enum_name, values, options
           column(enum_name, enum_name, options)
         end
+      end
+    end
+
+    module AdapterEnumSupport
+      def native_database_types
+        ActiveRecord::ConnectionAdapters::PostgreSQLAdapter::NATIVE_DATABASE_TYPES.merge(enum: {name: :enum})
+      end
+    end
+
+    module ColumnDumper
+      def prepare_column_options(column)
+        spec = super
+        spec[:array] = "true" if column.array?
+        if column.sql_type_metadata.type == :enum
+          spec[:values] = PgActiveRecordEnum.values_for(column.name)
+        end
+        spec
       end
     end
 

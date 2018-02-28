@@ -36,7 +36,7 @@ Migration:
 class CreateFruits < ActiveRecord::Migration[5.1]
   def change
     create_table :fruits do |t|
-      t.enum :fruit_type, values: %i[banana orange grape], allow_blank: true
+      t.enum :fruit_type, values: %i[banana orange grape], allow_blank: true, null: false, default: 'banana', index: true
       t.timestamps
     end
   end
@@ -53,7 +53,7 @@ class CreateFruits < ActiveRecord::Migration[5.1]
 end
 ```
 
-**allow_blank** adds empty value to enum.
+**allow_blank** adds empty value to enum, other options are default options for column.
 
 **Note:** migration rollback will remove enums only if other tables do not depend on them.
 
@@ -68,8 +68,8 @@ end
 
 ```ruby
 Fruit.banana.count # 0
-banana = Fruit.banana.create
-banana.banana? # true
+banana = Fruit.create
+banana.banana? # true because default
 banana.orange! #
 banana.orange? # true
 Fruit.orange.count # 1
@@ -82,9 +82,22 @@ In PostgreSQL DB:
 # select * from fruits;
  id | fruit_type |         created_at         |         updated_at         | color  
 ----+------------+----------------------------+----------------------------+--------
-  1 | orange     | 2018-02-28 18:46:37.628178 | 2018-02-28 18:46:37.637138 | orange
+  3 | orange     | 2018-02-28 20:45:13.724395 | 2018-02-28 20:45:13.731656 | orange
 (1 row)
 
+# \d fruits
+                                     Table "public.fruits"
+   Column   |            Type             |                      Modifiers                      
+------------+-----------------------------+-----------------------------------------------------
+ id         | bigint                      | not null default nextval('fruits_id_seq'::regclass)
+ fruit_type | fruit_type                  | not null default 'banana'::fruit_type
+ created_at | timestamp without time zone | not null
+ updated_at | timestamp without time zone | not null
+ color      | color                       | 
+Indexes:
+    "fruits_pkey" PRIMARY KEY, btree (id)
+    "index_fruits_on_fruit_type" btree (fruit_type)
+    
 # \dT+ fruit_type;
                                          List of data types
  Schema |    Name    | Internal name | Size | Elements |  Owner   | Access privileges | Description 
@@ -105,6 +118,17 @@ In PostgreSQL DB:
         |       |               |      | orange  +|          |                   | 
         |       |               |      |          |          |                   | 
 (1 row)
+```
+
+In `schema.rb`:
+```ruby
+create_table "fruits", force: :cascade do |t|
+  t.enum "fruit_type", default: "banana", null: false, values: ["banana", "orange", "grape", ""]
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+  t.enum "color", values: ["red", "green", "yellow", "orange", ""]
+  t.index ["fruit_type"], name: "index_fruits_on_fruit_type"
+end
 ```
 
 ## Development
